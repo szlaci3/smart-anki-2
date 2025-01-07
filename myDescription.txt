@@ -4,5 +4,6 @@ Created empty repo on github
     https://github.com/szlaci3/smart-anki-2.git
 clone
 
+pnpm create vite@latest --template react-ts
 
 
