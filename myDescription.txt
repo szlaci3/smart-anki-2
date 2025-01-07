@@ -1,9 +1,27 @@
+using pnpm
 
 2025-01-07
 Created empty repo on github
     https://github.com/szlaci3/smart-anki-2.git
 clone
 
-pnpm create vite@latest --template react-ts
+pnpm create vite@latest . --template react-ts
+
+https can't be displayed, so 
+    add mkcert.
+        In vite.config.ts:
+import { defineConfig } from 'vite';
+import mkcert from "vite-plugin-mkcert";
+import react from '@vitejs/plugin-react';
+
+export default defineConfig({
+  plugins: [react(), mkcert()],
+  server: {
+    origin: "https://localhost:3000",
+    https: true,
+    host: 'localhost',
+    port: 3000, // Change the port if needed
+  },
+});
 
 
