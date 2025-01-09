@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import axios from 'axios';
-import CardList from '@/components/CardList';
+import CardList from 'components/CardList';
 
 type Card = {
   id: number;
@@ -14,7 +14,7 @@ function RateCards() {
 
   useEffect(() => {
     axios
-      .get(`${SERVERIP}/cards`)
+      .get(`${import.meta.env.VITE_SERVERIP}/cards`)
       .then((response) => {
         setCardList(
           response.data.map((card) => ({
@@ -37,7 +37,7 @@ function RateCards() {
     });
 
     axios
-      .put(`${SERVERIP}/cards/${card.id}`, {
+      .put(`${import.meta.env.VITE_SERVERIP}/cards/${card.id}`, {
         ...card,
         sides: JSON.stringify(card.sides),
         rate,

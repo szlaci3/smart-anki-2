@@ -1,7 +1,6 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import axios from 'axios';
 import { v4 as uuidv4 } from 'uuid';
-uuidv4();
 
 const CardForm = () => {
   const [sides, setSides] = useState<string[]>(['', '']);
@@ -28,7 +27,7 @@ const CardForm = () => {
         reviewedAt: null,
       };
 
-      await axios.post(`${SERVERIP}/cards`, card);
+      await axios.post(`${import.meta.env.VITE_SERVERIP}/cards`, card);
     } catch (error) {
       console.error('Error creating card:', error);
       // Handle error

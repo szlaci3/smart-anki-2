@@ -1,7 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import axios from 'axios';
-import { Typography } from 'antd';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 
 const EditCard = () => {
   const [sides, setSides] = useState<string[]>(['', '']);
@@ -10,11 +9,12 @@ const EditCard = () => {
   const [error, setError] = useState(null);
 
   const { id } = useParams(); // Get the card ID from the URL
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchCard = async () => {
       try {
-        const response = await axios.get(`${SERVERIP}/cards/${id}`);
+        const response = await axios.get(`${import.meta.env.VITE_SERVERIP}/cards/${id}`);
         setCard(response.data);
         setSides(JSON.parse(response.data.sides));
       } catch (err) {
@@ -29,8 +29,6 @@ const EditCard = () => {
 
   if (loading) return <div>Loading...</div>;
   if (error) return <div>{error}</div>;
-
-  const { Title } = Typography;
 
   const handleAddSide = () => {
     if (sides.length < 10) {
@@ -54,19 +52,19 @@ const EditCard = () => {
         sides: JSON.stringify(updatedSides),
       };
 
-      await axios.put(`${SERVERIP}/cards/${id}`, updatedCard);
+      await axios.put(`${import.meta.env.VITE_SERVERIP}/cards/${id}`, updatedCard);
     } catch (error) {
-      console.error('Error creating card:', error);
+      console.error('Error updating card:', error);
     }
-    setSides(['', '']);
+    navigate("/");
   };
 
   return (
     <div>
       {card && (
         <div className="card-form" key={id}>
-          <Title>Editing Card</Title>
-          <Title level={4}>Card ID: {card.id}</Title>
+          <h1>Editing Card</h1>
+          <h4>Card ID: {card.id}</h4>
 
           {sides.map((side, index) => {
             let label;

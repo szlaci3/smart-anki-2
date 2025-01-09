@@ -1,31 +1,20 @@
 import './App.css'
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import routes from './routes';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Home from './pages/Home';
 import CardForm from './pages/CardForm';
 import EditCard from './pages/EditCard';
-import React from 'react';
-
-// Map components to paths
-const componentMap = {
-  '/': Home,
-  '/cardForm': CardForm,
-  '/editCard': EditCard
-};
+import Navigation from './components/Navigation';
 
 function App() {
   return (
-    <Router>
+    <BrowserRouter>
+      <Navigation />
       <Routes>
-        {routes.map((route) => (
-          <Route 
-          key={route.path} 
-          path={route.path} 
-          element={React.createElement(componentMap[route.path])}
-        />
-      ))}
+        <Route path="/" element={<Home />} />
+        <Route path="/cardForm" element={<CardForm />} />
+        <Route path="/editCard/:id" element={<EditCard />} />
       </Routes>
-    </Router>
+    </BrowserRouter>
   );
 }
 
