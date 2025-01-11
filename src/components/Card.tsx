@@ -4,7 +4,6 @@ import { useNavigate } from 'react-router-dom';
 function Card({ card, onRateCard }) {
   const [revealCount, setRevealCount] = useState(0);
   const [inputValue, setInputValue] = useState<'' | number>(1);
-
   const navigate = useNavigate();
 
   const handleShowNextSide = () => {
@@ -24,59 +23,53 @@ function Card({ card, onRateCard }) {
   const option4 = Math.max(3, Math.floor(option3 * 1.4));
 
   return (
-    <div className="card">
+    <div className="flashcard">
       <div>
-        {card.sides.slice(0, revealCount + 1).map((side, index) => (
-          <div
-            key={index}
-            className={`card-side ${
-              index === card.sides.length - 1 ? 'back' : 'front'
-            }`}
-          >
-            <h2>{side}</h2>
+        <div className="language-indicator">
+          <span>EN → FR</span>
+        </div>
+        
+        <div className="card-content">
+          {card.sides.slice(0, revealCount + 1).map((side, index) => (
+            <div key={index} className="side">
+              <h2>{side}</h2>
+            </div>
+          ))}
+        </div>
+
+        <div className="controls">
+          {card.sides.length - 1 > revealCount && (
+            <button type="button" className="show-button" onClick={handleShowNextSide}>
+              {revealCount ? 'Show Next Side' : 'Show Answer'}
+            </button>
+          )}
+
+          {revealCount > 0 && (
+            <div className="rating-buttons">
+              <button type="button" onClick={() => handleRateCard('10minutes')}><div>10</div><div>min</div></button>
+              <input
+                type="number"
+                value={inputValue}
+                onChange={(ev) => setInputValue(Math.max(1, Math.min(999, +ev.target.value)))}
+                onFocus={() => setInputValue('')}
+                min={1}
+                max={999}
+              />
+              <button type="button" onClick={() => handleRateCard(inputValue)} className="interactive-button">
+              <div>{inputValue || "0"}</div><div>day{inputValue === '' || inputValue === 1 ? '' : 's'}</div>
+              </button>
+              <button type="button" onClick={() => handleRateCard(option3)}><div>{option3}</div><div>day{option3 === '1' ? '' : 's'}</div></button>
+              <button type="button" onClick={() => handleRateCard(option4)}><div>{option4}</div><div>days</div></button>
+            </div>
+          )}
+          
+          <div className="difficulty-dots">
+            {[1, 2, 3].map((dot) => (
+              <div key={dot} className="dot"></div>
+            ))}
           </div>
-        ))}
-      </div>
-      <div>
-        {card.sides.length - 1 > revealCount && (
-          <button
-            type="button"
-            className="show-button"
-            onClick={handleShowNextSide}
-          >
-            {revealCount ? 'Show Next Side' : 'Show Answer'}
-          </button>
-        )}
-        {revealCount > 0 && (
-          <div className="rating-buttons">
-            <button type="button" onClick={() => handleRateCard('10minutes')}>
-              10 minutes
-            </button>
-            <input
-              type="number"
-              onChange={(ev) =>
-                setInputValue(Math.max(1, Math.min(999, +ev.target.value)))
-              }
-              onFocus={() => setInputValue('')}
-              value={inputValue}
-              min={1}
-              max={999}
-            />
-            <button type="button" onClick={() => handleRateCard(inputValue)}>
-              day{inputValue === 1 ? '' : 's'}
-            </button>
-            <button type="button" onClick={() => handleRateCard(option3)}>
-              {option3} days
-            </button>
-            <button type="button" onClick={() => handleRateCard(option4)}>
-              {option4} days
-            </button>
-          </div>
-        )}
-        <div>
-          <button type="button" onClick={() => onEditCard(card)}>
-            Edit
-          </button>
+          
+          <button type="button" onClick={() => onEditCard(card)}>Edit</button>
         </div>
       </div>
     </div>

@@ -24,4 +24,14 @@ export default defineConfig({
   },
 });
 
+2025-01-11
+To Enable the feature "Chrome devtools > Sources > Workspace > Add Folder", in vite.config.ts add:
+(Still not working. Maybe on other computers.)
+  css: {
+    devSourcemap: true,
+  },
+  build: {
+    sourcemap: true,
+  }
+
 

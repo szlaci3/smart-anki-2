@@ -7,8 +7,13 @@ export default defineConfig({
   plugins: [react(), mkcert(), tsconfigPaths()],
   server: {
     origin: "https://localhost:3000",
-    https: true,
     host: 'localhost',
     port: 3000,
   },
+  css: {
+    devSourcemap: true,
+  },
+  build: {
+    sourcemap: true,
+  }
 });

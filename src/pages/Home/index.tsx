@@ -52,10 +52,30 @@ function RateCards() {
   };
 
   return (
-    <div className="App">
-      <h1>SmartAnki</h1>
-      <h3>Flashcard App</h3>
-      <CardList cards={cardList} onRateCard={handleRateCard} />
+    <div className="app-container">
+      <div className="background">
+        <div className="background-base" />
+        <div className="background-middle">
+          <div className="diagonal-section-middle" />
+        </div>
+        <div className="background-top">
+          <div className="diagonal-section-top" />
+        </div>
+      </div>
+
+      <div className="content">
+        <div className="header">
+          <h1>SmartAnki Pro</h1>
+          <div className="streak">
+            <span>Daily Streak: 42</span>
+            <span>🔥</span>
+          </div>
+          <div className="progress-bar">
+            <div className="progress-fill"></div>
+          </div>
+        </div>
+        <CardList cards={cardList} onRateCard={handleRateCard} />
+      </div>
     </div>
   );
 }
