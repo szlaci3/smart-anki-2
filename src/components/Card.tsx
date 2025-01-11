@@ -1,10 +1,16 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 function Card({ card, onRateCard }) {
   const [revealCount, setRevealCount] = useState(0);
   const [inputValue, setInputValue] = useState<'' | number>(1);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if (card.rate !== 1) {
+      setInputValue(1);
+    }
+  }, [card]);
 
   const handleShowNextSide = () => {
     setRevealCount((prev) => prev + 1);

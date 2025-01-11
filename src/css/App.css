@@ -160,13 +160,13 @@ nav a {
   position: absolute;
   left: 50%;
   transform: translateX(-50%);
-  top: 6px;
-  border-radius: 3px 3px 0 0;
+  top: 2px;
+  border-radius: 7px 7px 0 0;
   background-color: #000;
   border: none;
-  width: 32px;
-  height: 12px;
-  padding: 3px;
+  width: calc(100% - 10px);
+  height: 11px;
+  padding: 12px 3px 3px;
   text-align: center;
   z-index: 9;
 }
