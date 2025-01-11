@@ -47,17 +47,19 @@ function Card({ card, onRateCard }) {
           {revealCount > 0 && (
             <div className="rating-buttons">
               <button type="button" onClick={() => handleRateCard('10minutes')}><div>10</div><div>min</div></button>
-              <input
-                type="number"
-                value={inputValue}
-                onChange={(ev) => setInputValue(Math.max(1, Math.min(999, +ev.target.value)))}
-                onFocus={() => setInputValue('')}
-                min={1}
-                max={999}
-              />
-              <button type="button" onClick={() => handleRateCard(inputValue)} className="interactive-button">
-              <div>{inputValue || "0"}</div><div>day{inputValue === '' || inputValue === 1 ? '' : 's'}</div>
-              </button>
+              <div className="interactive">
+                <input
+                  type="number"
+                  value={inputValue}
+                  onChange={(ev) => setInputValue(Math.max(1, Math.min(999, +ev.target.value)))}
+                  onFocus={() => setInputValue('')}
+                  min={1}
+                  max={999}
+                />
+                <button type="button" onClick={() => handleRateCard(inputValue)} className="interactive-button">
+                  <div>{inputValue || "0"}</div><div>day{inputValue === '' || inputValue === 1 ? '' : 's'}</div>
+                </button>
+              </div>
               <button type="button" onClick={() => handleRateCard(option3)}><div>{option3}</div><div>day{option3 === '1' ? '' : 's'}</div></button>
               <button type="button" onClick={() => handleRateCard(option4)}><div>{option4}</div><div>days</div></button>
             </div>
