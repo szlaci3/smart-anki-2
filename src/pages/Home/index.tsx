@@ -1,23 +1,17 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import CardList from 'components/CardList';
-
-type Card = {
-  id: number;
-  sides: string[];
-  rate: '10minutes' | number | null;
-  reviewedAt: number | null;
-};
+import { CardFromApi, CardType } from 'types/index';
 
 function RateCards() {
-  const [cardList, setCardList] = useState<Card[]>([]);
+  const [cardList, setCardList] = useState<CardType[]>([]);
 
   useEffect(() => {
     axios
       .get(`${import.meta.env.VITE_SERVERIP}/cards`)
       .then((response) => {
         setCardList(
-          response.data.map((card) => ({
+          response.data.map((card: CardFromApi) => ({
             ...card,
             sides: JSON.parse(card.sides),
           })),
@@ -28,7 +22,7 @@ function RateCards() {
       });
   }, []);
 
-  const handleRateCard = (card, rate) => {
+  const handleRateCard = (card: CardType, rate: number) => {
     const updatedCardList = cardList.map((cardItem) => {
       if (card.id === cardItem.id) {
         return { ...cardItem, rate, reviewedAt: Date.now() };
