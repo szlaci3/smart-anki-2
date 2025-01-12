@@ -1,12 +1,13 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, ChangeEvent } from 'react';
 import axios from 'axios';
 import { useParams, useNavigate } from 'react-router-dom';
+import { CardFromApi, CardType } from 'types/index';
 
 const EditCard = () => {
   const [sides, setSides] = useState<string[]>(['', '']);
-  const [card, setCard] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const [card, setCard] = useState<CardType | null>(null);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string | null>(null);
 
   const { id } = useParams(); // Get the card ID from the URL
   const navigate = useNavigate();
@@ -36,19 +37,19 @@ const EditCard = () => {
     }
   };
 
-  const handleSideChange = (index, value) => {
+  const handleSideChange = (index: number, value: string): void => {
     const updatedSides = [...sides];
     updatedSides[index] = value;
     setSides(updatedSides);
   };
 
-  const handleSubmit = async () => {
+  const handleSubmit = async (): Promise<void> => {
     try {
       // remove empty sides
       const updatedSides = sides.filter((item) => !!item);
 
-      const updatedCard = {
-        ...card,
+      const updatedCard: CardFromApi = {
+        ...card!,
         sides: JSON.stringify(updatedSides),
       };
 
@@ -85,7 +86,7 @@ const EditCard = () => {
                 <input
                   type="text"
                   value={side}
-                  onChange={(e) => handleSideChange(index, e.target.value)}
+                  onChange={(e: ChangeEvent<HTMLInputElement>) => handleSideChange(index, e.target.value)}
                 />
               </div>
             );

@@ -1,5 +1,5 @@
 interface BaseCard {
-    id: number;
+    id: string;
     rate: number | null;
     reviewedAt: number | null;
 }

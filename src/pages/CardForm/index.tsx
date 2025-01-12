@@ -1,6 +1,7 @@
-import { useState } from 'react';
+import { useState, ChangeEvent } from 'react';
 import axios from 'axios';
 import { v4 as uuidv4 } from 'uuid';
+import { CardFromApi } from 'types/index';
 
 const CardForm = () => {
   const [sides, setSides] = useState<string[]>(['', '']);
@@ -12,15 +13,15 @@ const CardForm = () => {
     }
   };
 
-  const handleSideChange = (index, value) => {
+  const handleSideChange = (index: number, value: string): void => {
     const updatedSides = [...sides];
     updatedSides[index] = value;
     setSides(updatedSides);
   };
 
-  const handleSubmit = async () => {
+  const handleSubmit = async (): Promise<void> => {
     try {
-      const card = {
+      const card: CardFromApi = {
         id,
         sides: JSON.stringify(sides),
         rate: null,
@@ -57,7 +58,7 @@ const CardForm = () => {
             <input
               type="text"
               value={side}
-              onChange={(e) => handleSideChange(index, e.target.value)}
+              onChange={(e: ChangeEvent<HTMLInputElement>) => handleSideChange(index, e.target.value)}
             />
           </div>
         );
