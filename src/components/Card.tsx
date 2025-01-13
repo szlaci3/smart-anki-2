@@ -8,7 +8,12 @@ function Card({ card, onRateCard }: CardProps) {
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (card.rate !== 1) {
+    // Inp remains from prev card. If btn_2 == btn_3, change btn_2.
+    if (card.rate === parseInt(inputValue)) {
+      setInputValue(card.rate === 1 ? '2' : '1');
+    }
+    // rate 0 also makes btn_3 '2', so change btn_2 to '1'.
+    if (card.rate === 0 && inputValue === '2') {
       setInputValue('1');
     }
   }, [card]);
