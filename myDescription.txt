@@ -34,4 +34,36 @@ To Enable the feature "Chrome devtools > Sources > Workspace > Add Folder", in v
     sourcemap: true,
   }
 
+Build failed second time, the CardForm etc is not properly typed.
+Webstie works with light mode version.
+rate needs to be converted to integer before dark version would work.
+
+How i migrated from '10min' to 0. ~
+  const Redis = require('redis');
+  const client = Redis.createClient();
+
+  async function migrateRates() {
+    const cards = await client.keys('card:*');
+    
+    for (const cardKey of cards) {
+      const card = await client.hGetAll(cardKey);
+      
+      if (card.rate === '10minutes') {
+        await client.multi()
+          .hSet(cardKey, 'rate', '0')
+          .exec();
+      }
+    }
+  }
+
+  migrateRates()
+    .then(() => console.log('Migration complete'))
+    .catch(console.error);
+
+
+  -----------
+    Run with:
+
+  node scripts/migrate-redis-rates.js
+  -------------  
 
