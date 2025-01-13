@@ -49,16 +49,19 @@ const EditCard = () => {
       // remove empty sides
       const updatedSides = sides.filter((item) => !!item);
 
+      if (!card) return;
+
       const updatedCard: CardFromApi = {
         ...card!,
+        rate: card.rate != null ? card.rate.toString() : card.rate,
         sides: JSON.stringify(updatedSides),
       };
 
       await axios.put(`${import.meta.env.VITE_SERVERIP}/cards/${id}`, updatedCard);
+      navigate("/");
     } catch (error) {
       console.error('Error updating card:', error);
     }
-    navigate("/");
   };
 
   return (

@@ -13,6 +13,7 @@ function RateCards() {
         setCardList(
           response.data.map((card: CardFromApi) => ({
             ...card,
+            rate: card.rate ? parseInt(card.rate) : card.rate,
             sides: JSON.parse(card.sides),
           })),
         );
