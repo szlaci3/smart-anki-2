@@ -46,7 +46,7 @@ function Card({ card, onRateCard }: CardProps) {
 					{card.sides
 						.slice(0, revealCount + 1)
 						.map((side: string, index: number) => (
-							// biome-ignore lint/suspicious/noArrayIndexKey: <explanation>
+							// biome-ignore lint/suspicious/noArrayIndexKey: <Sides are static>
 							<div key={index} className="side">
 								<h2>{side}</h2>
 							</div>
