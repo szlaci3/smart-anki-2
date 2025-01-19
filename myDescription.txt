@@ -67,3 +67,5 @@ How i migrated from '10min' to 0. ~
   node scripts/migrate-redis-rates.js
   -------------  
 
+pnpm add @biomejs/cli-win32-x64 @biomejs/biome
+

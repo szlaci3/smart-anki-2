@@ -13,6 +13,9 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@biomejs/biome": "^1.9.4",
+    "@biomejs/cli-win32-x64": "^1.9.4",
+    "@material-ui/core": "^4.12.4",
     "axios": "^1.7.9",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
