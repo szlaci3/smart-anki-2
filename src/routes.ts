@@ -2,22 +2,18 @@
 export interface Route {
   name?: string;
   path: string;
-  component: string;
 }
 
 export const routes: Route[] = [
   {
-    name: 'Review Cards',
-    path: '/',
-    component: './Home',
+    name: "Review Cards",
+    path: "/",
   },
   {
-    name: 'Add Cards',
-    path: '/cardForm',
-    component: './CardForm',
+    name: "Card Form",
+    path: "/cardForm",
   },
   {
-    path: '/editCard/:id',
-    component: './EditCard',
+    path: "/cardForm/:id",
   },
 ];

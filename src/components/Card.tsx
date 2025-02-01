@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router";
 import type { CardProps, CardType } from "types/index";
 
 function Card({ card, onRateCard }: CardProps) {
@@ -29,7 +29,7 @@ function Card({ card, onRateCard }: CardProps) {
 	};
 
 	const onEditCard = (card: CardType) => {
-		navigate(`/editCard/${card.id}`);
+		navigate(`/cardForm/${card.id}`);
 	};
 
 	const option3 = card.rate === 0 ? 2 : card.rate || 2;

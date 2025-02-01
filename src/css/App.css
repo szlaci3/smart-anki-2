@@ -163,6 +163,7 @@ nav a {
   top: 2px;
   border-radius: 7px 7px 0 0;
   background-color: #000;
+  color: #fff;
   border: none;
   width: calc(100% - 10px);
   height: 11px;
