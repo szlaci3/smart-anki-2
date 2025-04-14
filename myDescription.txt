@@ -67,5 +67,25 @@ How i migrated from '10min' to 0. ~
   node scripts/migrate-redis-rates.js
   -------------  
 
-pnpm add @biomejs/cli-win32-x64 @biomejs/biome
+pnpm add @biomejs/biome -D
+Ini i also installed windows-specific biome and was in non-dev *general dependencies but render.com build broke (probably).
+
+I had to force render.com to use node 16 or higher for my app, because vite requires it:
+Vite 4.x requires Node.js 14.18+/16+
+Render.com had node 14.17 but it was simpler to just require 16+. So i added in package.json:
+"engines": {
+		"node": ">=16.0.0"
+},
+
+The cards api is called 2 times locally, but in prid not, so i don't worry.
+
+Prompt:
+
+
+2smart-anki-2 is the React app and 9smart-anki-web-s is the web server. 
+Each Card can have a rate, an integer. 0 means the user wants to view it today again, other numbers mean the number of days until view it again. Let's replace the reviewedAt with dueDate. (is "due" the right word?) YYYY-MM-DD, stored as string on redis. So when user rates the card with 0, we record today as the dueDate. If rate is 1, then today + 1 day, etc. The server should deliver the cards, 10 at a time, sorted by dueDate, the earliest dates first. We'll also display due date as an under the hood info. When the ninth card is reveiewed, load early ten more cards again and adapt the code so it can manage cardList properly.  ......
+
+
+
+
 
