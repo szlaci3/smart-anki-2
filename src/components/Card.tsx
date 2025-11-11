@@ -17,6 +17,7 @@ function Card({ card, onRateCard }: CardProps) {
 		if (card.rate === 0 && inputValue === "2") {
 			setInputValue("1");
 		}
+		setRevealCount(0);
 	}, [card]);
 
 	const handleShowNextSide = () => {
@@ -25,7 +26,6 @@ function Card({ card, onRateCard }: CardProps) {
 
 	const handleRateCard = (rate: string) => {
 		onRateCard(rate === "" ? 1 : parseInt(rate));
-		setRevealCount(0);
 	};
 
 	const onEditCard = (card: CardType) => {
@@ -39,7 +39,7 @@ function Card({ card, onRateCard }: CardProps) {
 		<div className="flashcard">
 			<div>
 				<div className="language-indicator">
-					<span>EN → FR</span>
+					<span>EN → NL</span>
 				</div>
 
 				<div className="card-content">

@@ -1,22 +1,22 @@
 import axios from "axios";
 import CardList from "components/CardList";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import type { CardFromApi, CardType } from "types/index";
+import { coldStartCards } from "./coldStartCards";
 
 function RateCards() {
-	const [cardList, setCardList] = useState<CardType[]>([]);
+	const [cardList, setCardList] = useState<CardType[]>(coldStartCards);
+	const apiCardList = useRef<CardType[]>([]);
 
 	useEffect(() => {
 		axios
-			.get(`${import.meta.env.VITE_SERVERIP}/cards`)
+			.get(`${import.meta.env.VITE_SERVER_IP}/cards`)
 			.then((response) => {
-				setCardList(
-					response.data.map((card: CardFromApi) => ({
-						...card,
-						rate: card.rate ? parseInt(card.rate) : card.rate,
-						sides: JSON.parse(card.sides),
-					})),
-				);
+				apiCardList.current = response.data.map((card: CardFromApi) => ({
+					...card,
+					rate: card.rate ? parseInt(card.rate) : card.rate,
+					sides: JSON.parse(card.sides),
+				}));
 			})
 			.catch((error) => {
 				console.error("Error fetching flashcards:", error);
@@ -24,15 +24,22 @@ function RateCards() {
 	}, []);
 
 	const handleRateCard = (card: CardType, rate: number) => {
-		const updatedCardList = cardList.map((cardItem) => {
-			if (card.id === cardItem.id) {
-				return { ...cardItem, rate, reviewedAt: Date.now() };
-			}
-			return cardItem;
-		});
+		let updatedCardList: CardType[];
+
+		if (apiCardList.current.length > 0) {
+			updatedCardList = apiCardList.current;
+			apiCardList.current = [];
+		} else {
+			updatedCardList = cardList.map((cardItem) => {
+				if (card.id === cardItem.id) {
+					return { ...cardItem, rate, reviewedAt: Date.now() };
+				}
+				return cardItem;
+			});
+		}
 
 		axios
-			.put(`${import.meta.env.VITE_SERVERIP}/cards/${card.id}`, {
+			.put(`${import.meta.env.VITE_SERVER_IP}/cards/${card.id}`, {
 				...card,
 				sides: JSON.stringify(card.sides),
 				rate,
@@ -62,8 +69,8 @@ function RateCards() {
 				<div className="header">
 					<h1>SmartAnki Pro</h1>
 					<div className="streak">
-						<span>Daily Streak: 42</span>
-						<span>🔥🔥🔥</span>
+						<span>Daily Streak: 0</span>
+						<span>🔥</span>
 					</div>
 					<div className="progress-bar">
 						<div className="progress-fill" />
