@@ -37,6 +37,7 @@ const CardForm = () => {
 			setCard(response.data);
 			setSides(JSON.parse(response.data.sides));
 		} catch (err) {
+			console.error(err);
 			setError("Error fetching card data");
 		} finally {
 			setLoading(false);
@@ -74,8 +75,9 @@ const CardForm = () => {
 			} else {
 				// Update existing card
 				const updatedCard: CardFromApi = {
-					...card!,
+					...card,
 					rate: card.rate != null ? card.rate.toString() : card.rate,
+					dueAt: card.dueAt != null ? card.dueAt.toString() : card.dueAt,
 					sides: JSON.stringify(updatedSides),
 				};
 				await axios.put(

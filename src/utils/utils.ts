@@ -1,16 +1,5 @@
 import type { CardType } from "types/index";
 
-export const rand = (size: number, exclude: number | null = null) => {
-	if (size === 1) {
-		return 0;
-	}
-	let result: number;
-	do {
-		result = Math.floor(Math.random() * size);
-	} while (result === exclude);
-	return result;
-};
-
 /**
  * Selects the next card to review based on dueAt property.
  * Priority:
