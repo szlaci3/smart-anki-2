@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import type { CardListProps } from "src/types";
-import { rand } from "utils/utils";
+import { selectNextCard } from "utils/utils";
 import Card from "./Card";
 
 function CardList({ cards, onRateCard }: CardListProps) {
@@ -13,7 +13,10 @@ function CardList({ cards, onRateCard }: CardListProps) {
 	const currentCard = cards[currentCardIndex];
 
 	useEffect(() => {
-		setCurrentCardIndex((prev) => rand(cards.length, prev));
+		setCurrentCardIndex((prev) => {
+			const nextIndex = selectNextCard(cards, prev);
+			return nextIndex >= 0 ? nextIndex : 0;
+		});
 	}, [cards]);
 
 	return (

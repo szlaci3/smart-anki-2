@@ -67,7 +67,7 @@ const CardForm = () => {
 					id: uuidv4(),
 					sides: JSON.stringify(updatedSides),
 					rate: null,
-					reviewedAt: null,
+					dueAt: null,
 				};
 
 				await axios.post(`${import.meta.env.VITE_SERVER_IP}/cards`, newCard);

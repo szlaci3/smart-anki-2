@@ -2,6 +2,7 @@ import axios from "axios";
 import CardList from "components/CardList";
 import { useEffect, useRef, useState } from "react";
 import type { CardFromApi, CardType } from "types/index";
+import { calculateDueAt } from "utils/utils";
 import { coldStartCards } from "./coldStartCards";
 
 function RateCards() {
@@ -14,7 +15,8 @@ function RateCards() {
 			.then((response) => {
 				apiCardList.current = response.data.map((card: CardFromApi) => ({
 					...card,
-					rate: card.rate ? parseInt(card.rate) : card.rate,
+					rate: card.rate ? parseInt(card.rate, 10) : card.rate,
+					dueAt: card.dueAt ? parseInt(card.dueAt, 10) : null,
 					sides: JSON.parse(card.sides),
 				}));
 			})
@@ -25,17 +27,15 @@ function RateCards() {
 
 	const handleRateCard = (card: CardType, rate: number) => {
 		let updatedCardList: CardType[];
+		const dueAt = calculateDueAt(rate);
 
 		if (apiCardList.current.length > 0) {
 			updatedCardList = apiCardList.current;
 			apiCardList.current = [];
 		} else {
-			updatedCardList = cardList.map((cardItem) => {
-				if (card.id === cardItem.id) {
-					return { ...cardItem, rate, reviewedAt: Date.now() };
-				}
-				return cardItem;
-			});
+			updatedCardList = cardList.map((cardItem) =>
+				card.id === cardItem.id ? { ...cardItem, rate, dueAt } : cardItem,
+			);
 		}
 
 		axios
@@ -43,7 +43,7 @@ function RateCards() {
 				...card,
 				sides: JSON.stringify(card.sides),
 				rate,
-				reviewedAt: Date.now(),
+				dueAt,
 			})
 			.then(() => {
 				setCardList(updatedCardList);
