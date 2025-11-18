@@ -16,7 +16,6 @@ function RateCards() {
 				apiCardList.current = response.data.map((card: CardFromApi) => ({
 					...card,
 					rate: card.rate ? parseInt(card.rate, 10) : card.rate,
-					dueAt: card.dueAt ? parseInt(card.dueAt, 10) : null,
 					sides: JSON.parse(card.sides),
 				}));
 			})

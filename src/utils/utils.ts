@@ -67,6 +67,5 @@ export const calculateDueAt = (rate: number): number => {
 		return now + TEN_MINUTES_MS;
 	}
 
-	const normalizedRate = Math.max(1, rate);
-	return now + normalizedRate * DAY_IN_MS;
+	return now + rate * DAY_IN_MS;
 };
