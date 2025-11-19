@@ -5,37 +5,91 @@ import type { CardFromApi, CardType } from "types/index";
 import { calculateDueAt } from "utils/utils";
 import { coldStartCards } from "./coldStartCards";
 
+/*
+RateCards waits 1s before showing coldStartCards, giving the API a chance to respond.
+If the timer fires first, coldStartCards render and isUsingColdStart flips true.
+If the API responds while coldStartCards are shown, the real deck is stored in
+apiCardListRef (we keep showing coldStartCards). After the user rates that cold-start
+card, we swap in the cached real deck, and show a real card next.
+If the API responds before coldStartCards ever render, we cancel the timer and show
+the real deck immediately.
+*/
 function RateCards() {
-	const [cardList, setCardList] = useState<CardType[]>(coldStartCards);
-	const apiCardList = useRef<CardType[]>([]);
+	const [cardList, setCardList] = useState<CardType[]>([]);
+	const [isUsingColdStart, setIsUsingColdStart] = useState(false);
+	const coldStartTimerRef = useRef<number | null>(null);
+	const apiCardListRef = useRef<CardType[]>([]);
+	const isUsingColdStartRef = useRef(false);
 
 	useEffect(() => {
+		isUsingColdStartRef.current = isUsingColdStart;
+	}, [isUsingColdStart]);
+
+	useEffect(() => {
+		coldStartTimerRef.current = window.setTimeout(() => {
+			setCardList(coldStartCards);
+			setIsUsingColdStart(true);
+			coldStartTimerRef.current = null;
+		}, 1000);
+
 		axios
 			.get(`${import.meta.env.VITE_SERVER_IP}/cards`)
 			.then((response) => {
-				apiCardList.current = response.data.map((card: CardFromApi) => ({
-					...card,
-					rate: card.rate ? parseInt(card.rate, 10) : card.rate,
-					dueAt: card.dueAt ? parseInt(card.dueAt, 10) : card.dueAt,
-					sides: JSON.parse(card.sides),
-				}));
+				const normalizedCards: CardType[] = response.data.map(
+					(card: CardFromApi) => ({
+						...card,
+						rate: card.rate ? parseInt(card.rate, 10) : card.rate,
+						dueAt: card.dueAt ? parseInt(card.dueAt, 10) : card.dueAt,
+						sides: JSON.parse(card.sides),
+					}),
+				);
+
+				if (normalizedCards.length > 0) {
+					if (coldStartTimerRef.current !== null) {
+						clearTimeout(coldStartTimerRef.current);
+						coldStartTimerRef.current = null;
+					}
+
+					if (isUsingColdStartRef.current) {
+						apiCardListRef.current = normalizedCards;
+					} else {
+						setCardList(normalizedCards);
+						setIsUsingColdStart(false);
+					}
+				}
 			})
 			.catch((error) => {
 				console.error("Error fetching flashcards:", error);
 			});
+
+		return () => {
+			if (coldStartTimerRef.current !== null) {
+				clearTimeout(coldStartTimerRef.current);
+			}
+		};
 	}, []);
 
 	const handleRateCard = (card: CardType, rate: number) => {
-		let updatedCardList: CardType[];
 		const dueAt = calculateDueAt(rate);
 
-		if (apiCardList.current.length > 0) {
-			updatedCardList = apiCardList.current;
-			apiCardList.current = [];
-		} else {
-			updatedCardList = cardList.map((cardItem) =>
-				card.id === cardItem.id ? { ...cardItem, rate, dueAt } : cardItem,
-			);
+		const updatedCardList = cardList.map((cardItem) =>
+			card.id === cardItem.id ? { ...cardItem, rate, dueAt } : cardItem,
+		);
+
+		const applyUpdatedCards = () => {
+			setCardList(updatedCardList);
+		};
+
+		if (isUsingColdStart) {
+			applyUpdatedCards();
+
+			if (apiCardListRef.current.length > 0) {
+				setCardList(apiCardListRef.current);
+				setIsUsingColdStart(false);
+				apiCardListRef.current = [];
+			}
+
+			return;
 		}
 
 		axios
@@ -46,7 +100,7 @@ function RateCards() {
 				dueAt,
 			})
 			.then(() => {
-				setCardList(updatedCardList);
+				applyUpdatedCards();
 			})
 			.catch((error) => {
 				console.error("Error updating flashcard:", error);
