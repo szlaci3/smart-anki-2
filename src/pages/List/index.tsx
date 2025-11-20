@@ -247,7 +247,15 @@ function List() {
 									<div className="card-list-side">
 										{card.sides[0] || "Empty card"}
 									</div>
-									<div className="card-list-rate">
+									<div
+										className={`card-list-due ${
+											card.dueAt !== null &&
+											card.dueAt !== undefined &&
+											card.dueAt < Date.now()
+												? "past"
+												: ""
+										}`}
+									>
 										{formatDueAt(card.dueAt)}
 									</div>
 								</div>

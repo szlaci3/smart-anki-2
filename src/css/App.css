@@ -348,10 +348,14 @@ nav a {
 	font-weight: 500;
 }
 
-.card-list-rate {
-	color: #93c5fd;
+.card-list-due {
 	font-size: 0.875rem;
 	font-weight: 500;
+	color: #7e7e7e;
+}
+
+.card-list-due.past {
+	color: #439cff;
 }
 
 .card-list-actions {
