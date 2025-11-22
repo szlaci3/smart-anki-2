@@ -19,7 +19,7 @@ export interface CardProps {
 	onRateCard: (rate: number) => void;
 }
 
-export interface CardListProps {
+export interface StudySessionProps {
 	cards: CardType[];
 	onRateCard: (card: CardType, rate: number) => void;
 }

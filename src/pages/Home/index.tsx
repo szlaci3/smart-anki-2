@@ -1,5 +1,5 @@
 import axios from "axios";
-import CardList from "components/CardList";
+import StudySession from "components/StudySession";
 import { useEffect, useRef, useState } from "react";
 import type { CardFromApi, CardType } from "types/index";
 import { calculateDueAt } from "utils/utils";
@@ -130,7 +130,7 @@ function RateCards() {
 						<div className="progress-fill" />
 					</div>
 				</div>
-				<CardList cards={cardList} onRateCard={handleRateCard} />
+				<StudySession cards={cardList} onRateCard={handleRateCard} />
 			</div>
 		</div>
 	);
